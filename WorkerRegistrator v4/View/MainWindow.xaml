@@ -1,0 +1,225 @@
+﻿<Window x:Class="WorkerRegistrator_v4.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:WorkerRegistrator_v4.View"
+        xmlns:viewModel="clr-namespace:WorkerRegistrator_v4.ViewModel"
+        mc:Ignorable="d"
+        Title="Учет сотрудников Дирекции КЗС" MinHeight="450" MinWidth="1180" Height="650" Width="1180" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+        <viewModel:MainViewModel x:Key="viewModel"/>
+    </Window.Resources>
+    <Grid DataContext="{StaticResource ResourceKey=viewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="27"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="1" FontSize="20" Text="{Binding Today}" HorizontalAlignment="Center" 
+                       VerticalAlignment="Center" FontWeight="Bold"/>
+        </Grid>
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height=".65*"/>
+                </Grid.RowDefinitions>
+                <TextBlock  Text="Список сотрудников" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,5,0,10">
+                    <TextBlock Text="Поиск: "/>
+                    <TextBox x:Name="searchBox" Text="{Binding EmployeeNameSearch, UpdateSourceTrigger=PropertyChanged}" Width="233" 
+                             Height="24" FontSize="15"/>
+                    <Button Width="24" FontWeight="Bold" Background="White" BorderBrush="White" Click="EmployeesSearch_Click">
+                        <Button.Content>
+                            <TextBlock Text="X" Foreground="Gray"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+                <ListView Grid.Row="2" x:Name="employeesList" VerticalAlignment="Stretch" Margin="10,0,5,0" 
+                          ItemsSource="{Binding Employees}" SelectionMode="Single">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,3,0,3">
+                                <TextBlock Text="{Binding}" FontSize="14.5" FontWeight="Bold"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=Position}" FontSize="13.5" TextWrapping="WrapWithOverflow"
+                                               Width="270" FontStyle="Italic"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <TextBlock Grid.Row="3" Text="Водители: " HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                <ListView Grid.Row="4" x:Name="driversList" VerticalAlignment="Stretch" Margin="10,5,5,0" 
+                          ItemsSource="{Binding Drivers}" SelectionMode="Single" FontWeight="Bold"/>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height=".5*"/>
+                </Grid.RowDefinitions>
+                <Button x:Name="arrivedButton" VerticalAlignment="Center" 
+                    HorizontalAlignment="Stretch" Margin="5" Click="arrivedButton_Click">
+                    <Button.Content>
+                        <TextBlock TextAlignment="Center" Margin="5">
+                        <Run Text="Прибыл(а)"/>
+                        <LineBreak/>
+                        <Run Text=">>>"/>
+                        </TextBlock>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Row="1" x:Name="driverArrivedButton" VerticalAlignment="Center" 
+                        HorizontalAlignment="Stretch" Margin="5" Click="arrivedDriverButton_Click">
+                    <Button.Content>
+                        <TextBlock TextAlignment="Center" Margin="5">
+                            <Run Text="Добавить"/>
+                            <LineBreak/>
+                            <Run Text="водителя"/>
+                            <LineBreak/>
+                            <Run Text=">>>"/>
+                        </TextBlock>
+                    </Button.Content>
+                </Button>
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Сейчас находятся в Дирекции:" HorizontalAlignment="Center" Margin="0,10,0,5"/>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,5,0,10">
+                    <TextBlock Text="Поиск: "/>
+                    <TextBox x:Name="searchBoxInBuilding" Text="{Binding EmpInBuildingSearch, UpdateSourceTrigger=PropertyChanged}" 
+                             Width="233" Height="24" FontSize="15"/>
+                    <Button Width="24" FontWeight="Bold" Background="White" BorderBrush="White" Click="SearchInBuilding_Click">
+                        <Button.Content>
+                            <TextBlock Text="X" Foreground="Gray"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+                <ListView Grid.Row="2" x:Name="empInBuilding" VerticalAlignment="Stretch" Margin="5,0,5,0" 
+                          ItemsSource="{Binding EmpInBuilding}" SelectionMode="Single" SelectionChanged="empInBuilding_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,3,0,3">
+                                <TextBlock Text="{Binding}" FontSize="14.5" FontWeight="Bold"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Прибыл(а) в " FontSize="14.5"/>
+                                    <xctk:MaskedTextBox Text="{Binding Path=ArrivalString, Mode=OneWay}"
+                                                        FontSize="14.5" Mask="00:00" LostFocus="MaskedTextBox_LostFocus"
+                                                        IsHitTestVisible="{Binding Path=IsSelected}" GotFocus="MaskedTextBox_GotFocus"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Редактировать время прибытия" Click="EditArrivalTime_Click"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+                <Button Grid.Row="3" x:Name="delFromArrived" Content="Убрать сотрудника из списка" Width="250" Height="Auto" Margin="5" 
+                        Click="delFromArrived_Click"/>
+
+            </Grid>
+
+            <Button Grid.Column="3" x:Name="departedButton" VerticalAlignment="Center" 
+                    HorizontalAlignment="Stretch" Margin="5" Click="departedButton_Click">
+                <Button.Content>
+                    <TextBlock TextAlignment="Center" Margin="5">
+                        <Run Text="Убыл(а)"/>
+                        <LineBreak/>
+                        <Run Text=">>>"/>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock  Text="Убыли:" HorizontalAlignment="Center" Margin="0,5,0,5"/>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 5, 10, 5" HorizontalAlignment="Right">
+                    <TextBlock Text="Сортировать по: " Margin="0,3"/>
+                    <ComboBox Width="160" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged">
+                        <TextBlock Text="времени убытия"/>
+                        <TextBlock Text="времени прибытия"/>
+                        <TextBlock Text="алфавиту"/>
+                    </ComboBox>
+                </StackPanel>
+                <ListView Grid.Row="2" x:Name="departedList" VerticalAlignment="Stretch" Margin="5,0,10,0" 
+                          ItemsSource="{Binding EmpDeparted}" SelectionMode="Single">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,3,0,3">
+                                <TextBlock Text="{Binding}" FontSize="14.5" FontWeight="Bold"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Прибыл(а) в " FontSize="14.5"/>
+                                    <TextBlock Text="{Binding Path=ArrivalString}" FontSize="14.5"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Убыл(а) в " FontSize="14.5"/>
+                                    <TextBlock Text="{Binding Path=DepartureString}" FontSize="14.5"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Редактировать время прибытия" Click="EditArrivalTimeFromDepartureList_Click"/>
+                            <MenuItem Header="Редактировать время убытия" Click="EditDepartureTime_Click"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+                <Button Grid.Row="3" x:Name="delFromDeparted" Content="Убрать сотрудника из списка" Width="250" Height="Auto" Margin="5" 
+                        Click="delFromDeparted_Click"/>
+
+            </Grid>
+        </Grid>
+        <StatusBar Grid.Row="2">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,0,15,0">
+                    <TextBlock Text="Всего сегодня прибывало: "/>
+                    <TextBlock Text="{Binding TotalCount}"/>
+                    <TextBlock Text=" чел."/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Сейчас в Здании управления: "/>
+                    <TextBlock Text="{Binding CountInBuilding}"/>
+                    <TextBlock Text=" чел."/>
+                </StackPanel>
+            </StackPanel>
+        </StatusBar>
+    </Grid>
+</Window>
